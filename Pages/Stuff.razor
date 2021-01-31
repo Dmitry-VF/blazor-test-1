@@ -1,0 +1,23 @@
+﻿@page "/stuff"
+@using System.Net.Http
+@inject IHttpClientFactory factory
+
+<h3>Stuff</h3>
+
+@*<div class="card-body">
+    Total users: @content
+</div>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var client = factory.CreateClient("github");
+        var response = await client.GetAsync("repos/dotnet/docs/issues");
+        response.EnsureStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+    }*@
+
+
+
+}

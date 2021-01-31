@@ -1,0 +1,57 @@
+﻿@page "/"
+
+@inject GameIndustry.Repository.IRepository repository
+
+<GameListTable Games="games" />
+<IndividualGame Game="oneGameToShow" IsTable="false" DisplayButtons="true" SwitchGame="ShowNewGame" />
+
+<div class="row">
+    <div class="col text-center">
+        <button @onclick="AddNewGame" class="btn-success">Add new game</button>
+    </div>
+</div>
+
+@code {
+
+    List<Game> games;
+
+    Random rnd;
+    Game oneGameToShow;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        @*await Task.Delay(2000);*@
+
+    games = repository.GetAllGames();
+
+    rnd = new Random(DateTime.Now.Millisecond); //init
+    oneGameToShow = games[rnd.Next(0, games.Count)];
+}
+
+void ShowNewGame()
+{
+    oneGameToShow = SwitchGame();
+}
+
+Game SwitchGame()
+{
+    Game tempGame;
+    if (games.Count >= 2)
+    {
+        int iterator = rnd.Next(0, games.Count);
+        tempGame = games[iterator];
+    }
+    else if (games.Count == 1)
+    {
+        tempGame = games[0];
+    }
+    else return new Game() { Name = "No items in array!", ReleaseDate = DateTime.Now };
+    return tempGame;
+}
+
+void AddNewGame()
+{
+    games.Add(new Game() { Name = "Game for test", Genre = "Test", ReleaseDate = DateTime.Today });
+}
+}
